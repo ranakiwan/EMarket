@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import '../functions/homeFunctions.dart';
 import '../widgets/homeWidgets.dart';
-import 'service.dart';
+import '../functions/offlineFunctions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,15 +14,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isGridView = false;
+  bool hasInternet = true;
   String name = "Guest";
   String mail = "";
   List<dynamic> internetData = [];
+  List<dynamic> localData = [];
   File? _imageFile;
+
 
   @override
   void initState() {
     super.initState();
-    fetch(setState, (data) => internetData = data);
+    _initData();
     loadData(setState, (n, m, img) {
       name = n;
       mail = m;
@@ -30,8 +33,31 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> _initData() async {
+     hasInternet = await hasInternetConnection();
+    if (hasInternet) {
+      fetch(setState, (data) {
+        internetData = data;
+        saveFirstFiveProducts(data);
+        //printFirstFiveProducts();
+        setState(() {
+          hasInternet = true;
+        });
+        
+      });
+    }
+    else {
+      setState(() {
+        hasInternet = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      _initData();
+    });
     return Builder(
       builder: (context) => Scaffold(
         key: _scaffoldKey,
@@ -41,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           scaffoldKey: _scaffoldKey,
           isGridView: isGridView,
+          hasInternet: hasInternet,
           internetData: internetData,
           onToggleView: (grid) => setState(() => isGridView = grid),
         ),

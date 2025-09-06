@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../functions/whishlistFunctions.dart';
 import 'service.dart';
+import '../functions/homeFunctions.dart';
 
 class WhishlistScreen extends StatefulWidget {
   const WhishlistScreen({Key? key}) : super(key: key);
@@ -11,13 +12,22 @@ class WhishlistScreen extends StatefulWidget {
 
 class _WhishlistScreenState extends State<WhishlistScreen> {
   late Future<List<dynamic>> wishlistFuture;
+  bool hasInternet = true;
 
   @override
   void initState() {
     super.initState();
-    wishlistFuture = getWishlistProducts(); // load wishlist
+    wishlistFuture = getWishlistProducts();
+    _initData();
   }
-  
+
+  Future<void> _initData() async {
+      bool internet = await hasInternetConnection();
+    setState(() {
+      hasInternet = internet;
+    });
+  }
+
 
   void refreshWishlist() {
     setState(() {
@@ -27,6 +37,7 @@ class _WhishlistScreenState extends State<WhishlistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('My Wishlist'),foregroundColor: Colors.black, backgroundColor: Colors.white,),
@@ -34,7 +45,6 @@ class _WhishlistScreenState extends State<WhishlistScreen> {
         future: wishlistFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // loading
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -51,11 +61,18 @@ class _WhishlistScreenState extends State<WhishlistScreen> {
                 return ListTile(
                   title: Text(item['title'] ?? 'No Title'),
                   onTap: () async {
-                    int i = await findIndex(index);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ServicePage(pageIndex: i)),
-                    );
+                    bool internet = await hasInternetConnection();
+                    if (internet) {
+                      int i = await findIndex(index);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ServicePage(pageIndex: i)),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('No internet connection')),
+                      );
+                    }
                   },
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),

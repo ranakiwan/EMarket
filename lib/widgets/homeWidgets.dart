@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:beauty_products/functions/homeFunctions.dart';
+import 'package:beauty_products/functions/offlineFunctions.dart';
 import 'package:flutter/material.dart';
 import '../screens/service.dart';
 
@@ -68,6 +70,7 @@ Widget buildHomeBody({
   required BuildContext context,
   required GlobalKey<ScaffoldState> scaffoldKey,
   required bool isGridView,
+  required bool hasInternet,
   required List<dynamic> internetData,
   required Function(bool) onToggleView,
 }) {
@@ -81,9 +84,11 @@ Widget buildHomeBody({
         _buildProductHeader(isGridView, onToggleView),
         const SizedBox(height: 16),
         Expanded(
-          child: isGridView
-              ? _buildGridView(context, internetData)
-              : _buildListView(context, internetData),
+          child: hasInternet
+              ? (isGridView
+                  ? _buildGridView(context, internetData)
+                  : _buildListView(context, internetData))
+              : Text("no internet connection!"),
         ),
       ],
     ),
@@ -198,11 +203,18 @@ Widget _buildGridView(BuildContext context, List<dynamic> internetData) {
       final index = entry.key;
       final product = entry.value;
       return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ServicePage(pageIndex: index)),
-          );
+        onTap: () async {
+
+          if (await hasInternetConnection()) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ServicePage(pageIndex: index)),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No internet connection!')),
+            );
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -249,11 +261,17 @@ Widget _buildListView(BuildContext context, List<dynamic> internetData) {
       final index = entry.key;
       final product = entry.value;
       return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ServicePage(pageIndex: index)),
-          );
+        onTap: () async {
+          if (await hasInternetConnection()) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ServicePage(pageIndex: index)),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No internet connection!')),
+            );
+          }
         },
         child: Container(
           decoration: BoxDecoration(

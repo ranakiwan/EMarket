@@ -7,10 +7,12 @@
       "name": "beauty_products",
       "version": "1.0.0+1",
       "dependencies": [
+        "connectivity_plus",
         "crop_image",
         "cupertino_icons",
         "dio",
         "flutter",
+        "http",
         "image_cropper",
         "image_picker",
         "intl",
@@ -183,6 +185,29 @@
         "meta",
         "mime",
         "path"
+      ]
+    },
+    {
+      "name": "http",
+      "version": "1.5.0",
+      "dependencies": [
+        "async",
+        "http_parser",
+        "meta",
+        "web"
+      ]
+    },
+    {
+      "name": "connectivity_plus",
+      "version": "6.1.5",
+      "dependencies": [
+        "collection",
+        "connectivity_plus_platform_interface",
+        "flutter",
+        "flutter_web_plugins",
+        "meta",
+        "nm",
+        "web"
       ]
     },
     {
@@ -710,6 +735,27 @@
       ]
     },
     {
+      "name": "web",
+      "version": "1.1.1",
+      "dependencies": []
+    },
+    {
+      "name": "nm",
+      "version": "0.5.0",
+      "dependencies": [
+        "dbus"
+      ]
+    },
+    {
+      "name": "connectivity_plus_platform_interface",
+      "version": "2.0.1",
+      "dependencies": [
+        "flutter",
+        "meta",
+        "plugin_platform_interface"
+      ]
+    },
+    {
       "name": "sky_engine",
       "version": "0.0.0",
       "dependencies": []
@@ -742,21 +788,6 @@
       "version": "1.0.2",
       "dependencies": [
         "source_span"
-      ]
-    },
-    {
-      "name": "web",
-      "version": "1.1.1",
-      "dependencies": []
-    },
-    {
-      "name": "http",
-      "version": "1.5.0",
-      "dependencies": [
-        "async",
-        "http_parser",
-        "meta",
-        "web"
       ]
     },
     {
@@ -842,6 +873,16 @@
       "dependencies": [
         "meta",
         "path"
+      ]
+    },
+    {
+      "name": "dbus",
+      "version": "0.7.11",
+      "dependencies": [
+        "args",
+        "ffi",
+        "meta",
+        "xml"
       ]
     },
     {
