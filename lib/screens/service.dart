@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../functions/serviceFunctions.dart';
 import '../widgets/serviceWidgets.dart';
 import '../functions/whishlistFunctions.dart';
+import '../widgets/tagWidget.dart';
+import 'reviews.dart';
 
 class ServicePageArguments {}
 
@@ -94,6 +96,10 @@ Future<void> _initializeWishlistState() async {
                             ),
                           ),
                           const SizedBox(height: 16),
+                          const Text("Tags:", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                          Row(children: [
+                            ...internetData[widget.pageIndex]['tags'].map((tag) => TagWidget(label: tag ?? '')).toList(),
+                          ],),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -105,6 +111,22 @@ Future<void> _initializeWishlistState() async {
                             ],
                           ),
                           const SizedBox(height: 16),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ReviewPage(reviews: internetData[widget.pageIndex]['reviews'] ?? [])),
+                              );
+                            },
+                            child: const Text("Reviews"),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),),
                           Row(
                             children: [
                               StatefulBuilder(

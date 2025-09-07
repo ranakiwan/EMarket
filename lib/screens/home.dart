@@ -36,15 +36,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _initData() async {
      hasInternet = await hasInternetConnection();
     if (hasInternet) {
+
       fetch(setState, (data) {
         internetData = data;
         saveFirstFiveProducts(data);
-        //printFirstFiveProducts();
         setState(() {
           hasInternet = true;
+        
         });
         
       });
+      localData = await getFirstFiveProducts();
     }
     else {
       setState(() {
@@ -69,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           isGridView: isGridView,
           hasInternet: hasInternet,
           internetData: internetData,
+          localData: localData,
           onToggleView: (grid) => setState(() => isGridView = grid),
         ),
       ),

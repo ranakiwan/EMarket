@@ -15,7 +15,7 @@ Future<List<dynamic>> getFirstFiveProducts() async {
   List<String>? jsonList = prefs.getStringList('first_five_products');
 
   if (jsonList != null) {
-    // Decode each JSON string into dynamic (usually Map<String, dynamic>)
+    
     return jsonList.map((jsonStr) => jsonDecode(jsonStr)).toList();
   }
 

@@ -72,6 +72,7 @@ Widget buildHomeBody({
   required bool isGridView,
   required bool hasInternet,
   required List<dynamic> internetData,
+  required List<dynamic> localData,
   required Function(bool) onToggleView,
 }) {
   return Padding(
@@ -88,7 +89,9 @@ Widget buildHomeBody({
               ? (isGridView
                   ? _buildGridView(context, internetData)
                   : _buildListView(context, internetData))
-              : Text("no internet connection!"),
+              : (isGridView
+                  ? _buildGridView(context, localData)
+                  : _buildListView(context, localData)),
         ),
       ],
     ),

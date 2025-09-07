@@ -48,16 +48,14 @@ Future<void> showImageSourceActionSheet(
 
   void pickImage(ImageSource source) async {
     try {
-      // Request permissions
+      
       if (source == ImageSource.camera &&
           !await Permission.camera.request().isGranted) return;
       if (source == ImageSource.gallery &&
           !await Permission.photos.request().isGranted) return;
 
-      // Pick image
       final XFile? picked = await picker.pickImage(source: source);
       if (picked != null) {
-        // Crop image
         final cropped = await ImageCropper().cropImage(
           sourcePath: picked.path,
           uiSettings: [
@@ -82,7 +80,6 @@ Future<void> showImageSourceActionSheet(
           ],
         );
 
-        // Return cropped file
         if (cropped != null) onImageChanged(File(cropped.path));
       }
     } catch (e) {
